@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phạm Yến Land - Thành Công Từ Thiện Tâm & Hợp Tác</title>
+    <style>
+        /* --- CÀI ĐẶT CƠ BẢN --- */
+        :root {
+            --primary-color: #d4af37; /* Màu vàng kim sang trọng */
+            --text-color: #333;
+            --bg-light: #f9f9f9;
+            --bg-dark: #222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #fff; /* Quan trọng để che lớp hero */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000; /* Luôn nằm trên cùng */
+            top: 0;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo img {
+            height: 60px; 
+            object-fit: contain;
+        }
+
+        .menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .menu a {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION (PARALLAX EFFECT) --- */
+        .hero {
+            height: 100vh;
+            position: fixed; /* CỐ ĐỊNH HERO LẠI */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: -1; /* Đẩy ra sau cùng */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .slide-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1);
+            animation: slideEffect 18s infinite; 
+        }
+
+        .slide-1 { background-image: url('hero1.jpg'); animation-delay: 0s; }
+        .slide-2 { background-image: url('hero2.jpg'); animation-delay: 6s; }
+        .slide-3 { background-image: url('hero3.jpg'); animation-delay: 12s; }
+
+        @keyframes slideEffect {
+            0% { opacity: 0; transform: scale(1); }
+            5% { opacity: 1; }
+            33% { opacity: 1; }
+            38% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 0; transform: scale(1.1); }
+        }
+
+       .hero-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #b59020;
+        }
+
+        /* --- CONTENT WRAPPER (Để tạo hiệu ứng lướt đè lên Hero) --- */
+        .main-content-wrapper {
+            position: relative;
+            background-color: #fff; /* Nền trắng để che Hero */
+            margin-top: 100vh; /* Đẩy nội dung xuống đúng bằng chiều cao màn hình */
+            z-index: 10; /* Nằm trên Hero (z-index -1) */
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1); /* Tạo bóng đổ nhẹ phía trên */
+        }
+
+        /* --- SCROLL REVEAL ANIMATION (CSS cho hiệu ứng hiện ra) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(70px); /* Dịch xuống sâu hơn chút để thấy rõ hiệu ứng bay lên */
+            transition: all 0.6s ease-out; /* Nhanh hơn chút để cảm giác mượt khi lặp lại */
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0); /* Trở về vị trí cũ */
+        }
+        
+        /* Hiệu ứng delay cho các phần tử con trong grid */
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* --- ABOUT CEO SECTION --- */
+        .about-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-img {
+            text-align: center;
+        }
+
+        .about-img img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .about-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .about-text h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .quote-box {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+            font-style: italic;
+            background: #fdfdfd;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        /* --- VALUES & ACTIVITIES --- */
+        .values-section {
+            padding: 80px 0;
+            background: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .section-title span {
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .gallery-caption {
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- FACEBOOK NEWS SECTION --- */
+        .news-section {
+            background: #fff;
+            padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .news-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+        }
+
+        .slider-container {
+            width: 100%;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .slider-track {
+            display: flex;
+            width: max-content;
+            gap: 30px;
+            animation: scroll 30s linear infinite; 
+        }
+
+        .slider-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
+        .fb-embed-card {
+            width: 350px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10px;
+        }
+
+        .fb-embed-card iframe {
+            width: 100% !important;
+            max-width: 500px;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background: var(--bg-dark);
+            color: #fff;
+            padding: 50px 0 20px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .contact-item span {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                padding: 20px;
+                box-shadow: 0 5px 5px rgba(0,0,0,0.1);
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero h1 { font-size: 2rem; }
+            
+            .about-grid, .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .quote-box {
+                margin: 20px auto;
+            }
+
+            .slider-track {
+                animation: none;
+                overflow-x: auto;
+                padding-bottom: 20px;
+                width: 100%;
+                gap: 15px;
+            }
+            .fb-embed-card {
+                width: 300px;
+            }
+            
+            .reveal { transform: translateY(40px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-bar">
+            <div class="logo">
+                <img src="image_66a62e.jpg" alt="Logo Phạm Yến Land">
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav class="menu" id="mainMenu">
+                <a href="#home">Trang chủ</a>
+                <a href="#about">Về Giám Đốc</a>
+                <a href="#activities">Hợp tác & Thiện nguyện</a>
+                <a href="#news">Dự án mới</a>
+                <a href="#contact">Liên hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-slideshow">
+            <div class="slide-item slide-1"></div>
+            <div class="slide-item slide-2"></div>
+            <div class="slide-item slide-3"></div>
+        </div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <h1>PHẠM YẾN LAND</h1>
+            <p>Thành Công = Thiện Tâm + Hợp Tác</p>
+            <p>Chuyên bất động sản & Đầu tư tại Nha Trang, Khánh Hòa</p>
+            <a href="#contact" class="btn">LIÊN HỆ TƯ VẤN</a>
+        </div>
+    </section>
+
+    <div class="main-content-wrapper">
+
+        <section id="about" class="about-section">
+            <div class="container about-grid">
+                <div class="about-img reveal">
+                    <img src="image_66ad12.jpg" alt="Giám đốc Phạm Thị Kim Yến">
+                </div>
+                <div class="about-text reveal reveal-delay-2">
+                    <h3>GIÁM ĐỐC</h3>
+                    <h2>PHẠM THỊ KIM YẾN</h2>
+                    <p>Chào mừng quý khách đến với Phạm Yến Land. Với nhiều năm kinh nghiệm tại thị trường Nha Trang, chúng tôi không chỉ mang đến những cơ hội đầu tư sinh lời mà còn đặt giá trị cốt lõi lên hàng đầu.</p>
+                    <div class="quote-box">
+                        "Đối với tôi, sự phát triển bền vững phải dựa trên sự HỢP TÁC chân thành và cái tâm làm nghề (THIỆN TÂM). Mỗi mảnh đất trao đi là một niềm tin được gửi gắm."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activities" class="values-section">
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>HỢP TÁC & THIỆN NGUYỆN</h2>
+                    <span></span>
+                </div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item reveal reveal-delay-1">
+                        <img src="image_66ad6f.jpg" alt="Lễ Ký Kết Hợp Tác">
+                        <div class="gallery-caption">Chiến Lược Phân Phối Dự Án</div>
+                    </div>
+                    <div class="gallery-item reveal reveal-delay-2">
+                        <img src="image_66a916.jpg" alt="Sự kiện công ty">
+                        <div class="gallery-caption">Đội Ngũ Đoàn Kết</div>
+                    </div>
+                    <div class="gallery-item reveal reveal-delay-3">
+                        <img src="image_66ad33.jpg" alt="Vui hội trăng rằm">
+                        <div class="gallery-caption">Thiện Nguyện Vì Cộng Đồng</div>
+                    </div>
+                     <div class="gallery-item reveal reveal-delay-4">
+                        <img src="image_66a650.jpg" alt="Làm việc nhóm">
+                        <div class="gallery-caption">Tận Tâm Với Khách Hàng</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="news-section">
+            <div class="container">
+                <div class="section-title reveal">
+                    <h2>DỰ ÁN & TIN TỨC MỚI NHẤT</h2>
+                    <span></span>
+                </div>
+                <p class="news-intro reveal">Cập nhật các hoạt động nổi bật từ Facebook chính thức (Lướt ngang để xem thêm).</p>
+
+                <div class="slider-container reveal reveal-delay-2">
+                    <div class="slider-track">
+                        
+                        <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid029tQ484b5HtHcNjAd9vSQRjuwuqwB16KKmZna2CvJYnvhhtVnd7my1NhnzTC82oi9l%26id%3D100046016336047&show_text=true&width=500" width="500" height="697" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        </div>
+
+                        <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02VezekdunQS56pRrVKzwPkYacd8uC7oGcykRkHWRVh25drU2wHqDKYVnTSuAycYopl%26id%3D100046016336047&show_text=true&width=500" width="500" height="722" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        </div>
+
+                         <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid029tQ484b5HtHcNjAd9vSQRjuwuqwB16KKmZna2CvJYnvhhtVnd7my1NhnzTC82oi9l%26id%3D100046016336047&show_text=true&width=500" width="500" height="697" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        </div>
+
+
+                        <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2F100046016336047%2Fvideos%2F1945448646236173%2F&show_text=true&width=267&t=0" width="267" height="591" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+                        </div>
+
+                        <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid02VezekdunQS56pRrVKzwPkYacd8uC7oGcykRkHWRVh25drU2wHqDKYVnTSuAycYopl%26id%3D100046016336047&show_text=true&width=500" width="500" height="722" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        </div>
+
+                        <div class="fb-embed-card">
+                            <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid029tQ484b5HtHcNjAd9vSQRjuwuqwB16KKmZna2CvJYnvhhtVnd7my1NhnzTC82oi9l%26id%3D100046016336047&show_text=true&width=500" width="500" height="697" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;" class="reveal">
+                    <a href="https://www.facebook.com/profile.php?id=100046016336047" target="_blank" class="btn">XEM TẤT CẢ TRÊN FACEBOOK</a>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="footer">
+            <div class="container footer-grid">
+                <div class="contact-info reveal">
+                    <h3>PHẠM YẾN LAND</h3>
+                    <div class="contact-item">
+                        <span>📍</span> 
+                        Địa chỉ: 6 Đường số 13, khu đô thị Hà Quang 2, Phường Nam Nha Trang, Tỉnh Khánh Hòa, Việt Nam
+                    </div>
+                    <div class="contact-item">
+                        <span>📞</span> 
+                        Hotline: 0905 050 075
+                    </div>
+                    <div class="contact-item">
+                        <span>🌐</span> 
+                        <a href="https://www.facebook.com/profile.php?id=100046016336047" target="_blank" style="color: var(--primary-color); text-decoration: underline;">
+                            Facebook: Phạm Yến Land
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="map reveal reveal-delay-2"> <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3898.9708293825825!2d109.17132747482863!3d12.250253288002746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31705d00247f163b%3A0x78f2fd2f1d28857e!2zUGjhuqFtIFnhur9uIExhbmQ!5e0!3m2!1sen!2sus!4v1767166727675!5m2!1sen!2sus" width="100%" height="250" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"> </iframe> </div>
+            </div>
+            <div class="copyright">
+                © 2025 Phạm Yến Land. All rights reserved.
+            </div>
+        </footer>
+
+    </div> <script>
+        /* --- JS CHO MENU MOBILE --- */
+        function toggleMenu() {
+            var menu = document.getElementById("mainMenu");
+            menu.classList.toggle("active");
+        }
+
+        /* --- JS CHO SCROLL REVEAL (HIỆU ỨNG HIỆN KHI CUỘN) --- */
+        document.addEventListener('DOMContentLoaded', function() {
+            var reveals = document.querySelectorAll('.reveal');
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        // Nếu thấy thì hiện
+                        entry.target.classList.add('active');
+                    } else {
+                        // Nếu không thấy thì ẩn đi (để lần sau lướt tới lại hiện)
+                        entry.target.classList.remove('active');
+                    }
+                });
+            }, {
+                threshold: 0.1 // Chỉ cần thấy 10% là hiện luôn cho nhạy
+            });
+
+            reveals.forEach(function(reveal) {
+                observer.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
